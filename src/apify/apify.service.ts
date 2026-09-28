@@ -13,7 +13,6 @@ export class ApifyService {
   }
 
   async getJobs(): Promise<Job[]> {
-    // This is the actor that does the scraping for us
     const bebityActorId = this.configService.get<string>(
       'APIFY_BEBITY_ACTOR_ID',
     );
@@ -21,13 +20,11 @@ export class ApifyService {
     if (!bebityActorId) {
       throw new Error('APIFY_BEBITY_ACTOR_ID is not configured');
     }
-    //id: 'wY0BUAgvNDzvLdv8I',
     const usJobsRun = await this.apifyClient.actor(bebityActorId).call({
       companyProfile: true,
       contractTypes: ['F'],
       easyApply: false,
       enrichCompany: false, // set to true if we want companyEmployeeCount and more
-      // experienceLevels: ['4'],
       locations: ['United States'],
       publishedAt: 'r604800',
       rows: 25,
@@ -40,7 +37,6 @@ export class ApifyService {
       contractTypes: ['F'],
       easyApply: false,
       enrichCompany: false, // set to true if we want companyEmployeeCount and more
-      // experienceLevels: ['4'],
       locations: ['Florida'],
       publishedAt: 'r604800',
       rows: 25,
@@ -48,7 +44,6 @@ export class ApifyService {
       under10Applicants: false,
     });
 
-    // Now we call listItems() with that dataset ID to get the actual jobs
     const { items: usJobs } = await this.apifyClient
       .dataset(usJobsRun.defaultDatasetId)
       .listItems();
